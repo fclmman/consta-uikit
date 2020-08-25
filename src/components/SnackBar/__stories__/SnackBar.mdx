@@ -1,14 +1,58 @@
 import { SnackBarExampleSimple } from './examples/SnackBarExampleSimple/SnackBarExampleSimple';
+import { SnackBarExampleStatus } from './examples/SnackBarExampleStatus/SnackBarExampleStatus';
 import { SnackBarExampleWithButtons } from './examples/SnackBarExampleWithButtons/SnackBarExampleWithButtons';
 
 # SnackBar
 
+Для коротких сообщений о результате процесса, который уже закончен. Если процесс
+всё еще идет, используйте Informer.
+
+- [Текст сообщения](#текст-сообщения)
+- [Статус](#статус)
+- [Иконка](#иконка)
+- [Кнопки](#кнопки)
+- [Таймер](#таймер)
+- [Список свойств](#свойства)
+- [Пример использования](#пример)
+
+## Текст сообщения
+
+За текст сообщения отвечает `message`.
+
+Пишите коротко и лаконично. С заглавной, точка не нужна.
+
+## Статус
+
+От статуса зависит цвет фона под текстом (задается в свойстве `status`).
+
+<SnackBarExampleStatus />
+
+## Иконка
+
+Добавьте любую из библиотеки иконок с помощью свойства `icon`.
+
+
+## Кнопки
+
+Добавьте кнопки, если хотите, чтобы пользователь мог отреагировать на событие.
+Например, отменить его или куда-то перейти.
+
+
+## Таймер
+
+Используйте таймер, если сообщений о событиях слишком много и они не очень важные.
+Тогда сообщение будет держаться на экране некоторое время, а потом исчезнет.
+
+Таймер можно добавить с помощью `autoClose`.
+
+
+
 ## Свойства
 
-| Свойство   | Тип                                                                                                                                                                                                                                                                                                                                   | По умолчанию | Описание                                                                                               |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------ |
-| className? | `string`                                                                                                                                                                                                                                                                                                                              | -            | Дополнительный класс                                                                                   |
-| items      | `{ key: string, number; message?: string, number; status?: 'system', 'success', 'warning', 'alert', 'normal'; autoClose?: boolean, number; icon?: React.FC<IconProps>; actions?: { label: string, number; onClick: React.EventHandler<React.MouseEvent>; }[];onClose?: (item: Item) => void; onAutoClose?: (item: Item) => void; }[]` | -            | Массив элементов. Если не передавать `onAutoClose` то по истечению таймера будет срабатывать `onClose` |
+| Свойство   | Тип           | По умолчанию | Описание     |
+| ---------- | ------------- | ------------ | ------------ |
+| `className`| `string`      | -            | Дополнительный CSS-класс|
+| items      | `{ key: string, number; message?: string, number; status?: 'system', 'success', 'warning', 'alert', 'normal'; autoClose?: boolean, number; icon?: React.FC<IconProps>; actions?: { label: string, number; onClick: React.EventHandler<React.MouseEvent>; }[];onClose?: (item: Item) => void; onAutoClose?: (item: Item) => void; }[]` | -      | Массив элементов. Если не передавать `onAutoClose` то по истечению таймера будет срабатывать `onClose` |
 
 ## Пример
 
@@ -95,36 +139,36 @@ function SnackBarExample() {
   return (
     <div className={cnSnackBarStories()}>
       <div className={cnSnackBarStories('Buttons')}>
-        <Button
-          className={cnSnackBarStories('ButtonAdd')}
-          iconLeft={IconAdd}
-          label="Выполненно"
-          onClick={handleSuccessAdd}
-        />
-        <Button
-          className={cnSnackBarStories('ButtonAdd')}
-          iconLeft={IconAdd}
-          label="Ошибка"
-          onClick={handleAlertAdd}
-        />
-        <Button
-          className={cnSnackBarStories('ButtonAdd')}
-          iconLeft={IconAdd}
-          label="Предупреждение"
-          onClick={handleWarningAdd}
-        />
-        <Button
-          className={cnSnackBarStories('ButtonAdd')}
-          iconLeft={IconAdd}
-          label="Системное"
-          onClick={handleSystemAdd}
-        />
-        <Button
-          className={cnSnackBarStories('ButtonAdd')}
-          iconLeft={IconAdd}
-          label="Нормальное"
-          onClick={handleNormalAdd}
-        />
+  <Button
+    className={cnSnackBarStories('ButtonAdd')}
+    iconLeft={IconAdd}
+    label="Выполненно"
+    onClick={handleSuccessAdd}
+  />
+  <Button
+    className={cnSnackBarStories('ButtonAdd')}
+    iconLeft={IconAdd}
+    label="Ошибка"
+    onClick={handleAlertAdd}
+  />
+  <Button
+    className={cnSnackBarStories('ButtonAdd')}
+    iconLeft={IconAdd}
+    label="Предупреждение"
+    onClick={handleWarningAdd}
+  />
+  <Button
+    className={cnSnackBarStories('ButtonAdd')}
+    iconLeft={IconAdd}
+    label="Системное"
+    onClick={handleSystemAdd}
+  />
+  <Button
+    className={cnSnackBarStories('ButtonAdd')}
+    iconLeft={IconAdd}
+    label="Нормальное"
+    onClick={handleNormalAdd}
+  />
       </div>
       <SnackBar className={cnSnackBarStories('SnackBar')} items={items} />
     </div>
