@@ -1,6 +1,6 @@
 import './DatePicker.css';
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { forwardRef, useLayoutEffect, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { classnames } from '@bem-react/classnames';
@@ -17,7 +17,13 @@ import { Calendar } from './Calendar/Calendar';
 import { InputDate } from './InputDate/InputDate';
 import { MonthsSliderRange } from './MonthsSliderRange/MonthsSliderRange';
 import { MonthsSliderSingle } from './MonthsSliderSingle/MonthsSliderSingle';
-import { getCurrentVisibleDate, isDateFullyEntered, isDateIsInvalid, isDateRange } from './helpers';
+import {
+  getCurrentVisibleDate,
+  isDateFullyEntered,
+  isDateIsInvalid,
+  isDateRange,
+  useCombinedRefs,
+} from './helpers';
 
 export type DateRange = [Date?, Date?];
 
@@ -26,6 +32,7 @@ export type Size = typeof sizes[number];
 
 export type StyleProps = {
   size?: Size;
+  className?: string;
 };
 
 export type DateLimitProps = {
@@ -106,7 +113,7 @@ const defaultRenderRangeControls: RenderControls<DateRange> = (props) => {
   );
 };
 
-export const DatePicker: React.FC<Props> = (props) => {
+export const DatePicker = forwardRef<HTMLDivElement, Props>((props, ref) => {
   /**
    * Не деструктурируем value и type из объекта props, т.к. при их деструктуризации
    * TypeScript выводит общий тип из объединения в пересечение, пример:
@@ -122,11 +129,12 @@ export const DatePicker: React.FC<Props> = (props) => {
    * чтобы разделять обработку для Date и DateRange через условия, а type можно проверять напрямую
    * без type guard, т.к. без деструктуризации он сохраняет исходный тип date | date-range.
    */
-  const { minDate: sourceMinDate, maxDate: sourceMaxDate, size } = props;
+  const { minDate: sourceMinDate, maxDate: sourceMaxDate, size, className } = props;
   const minDate = startOfDay(sourceMinDate);
   const maxDate = endOfDay(sourceMaxDate);
 
   const controlsRef = useRef<HTMLDivElement>(null);
+  const combinedRef = useCombinedRefs(ref, controlsRef);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [currentVisibleDate, setCurrentVisibleDate] = useState<Date>(
     getCurrentVisibleDate({ value: props.value, minDate, maxDate }),
@@ -211,12 +219,12 @@ export const DatePicker: React.FC<Props> = (props) => {
   };
 
   return (
-    <div>
+    <>
       <div
-        className={cnDatePicker('Controls')}
+        className={cnDatePicker(null, [className])}
         role="button"
         tabIndex={0}
-        ref={controlsRef}
+        ref={combinedRef}
         onClick={() => setIsTooltipVisible(!isTooltipVisible)}
         onKeyDown={() => setIsTooltipVisible(!isTooltipVisible)}
       >
@@ -224,10 +232,19 @@ export const DatePicker: React.FC<Props> = (props) => {
       </div>
       {isTooltipVisible && (
         <Popover
-          anchorRef={controlsRef}
+          anchorRef={combinedRef}
           offset={4}
-          direction="downCenter"
-          possibleDirections={['upCenter', 'leftCenter', 'rightCenter', 'downCenter']}
+          direction="downStartLeft"
+          possibleDirections={[
+            'upCenter',
+            'leftCenter',
+            'rightCenter',
+            'downCenter',
+            'downStartLeft',
+            'upStartLeft',
+            'downStartRight',
+            'upStartRight',
+          ]}
           onClickOutside={handleApplyDate}
         >
           <div className={classnames(themeClassNames.color.invert, cnDatePicker('Tooltip'))}>
@@ -251,6 +268,6 @@ export const DatePicker: React.FC<Props> = (props) => {
           </div>
         </Popover>
       )}
-    </div>
+    </>
   );
-};
+});

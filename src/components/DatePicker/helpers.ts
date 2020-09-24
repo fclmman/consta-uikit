@@ -1,3 +1,4 @@
+import { Ref, useEffect, useRef } from 'react';
 import { format, isWithinInterval } from 'date-fns';
 import ruLocale from 'date-fns/locale/ru';
 
@@ -86,4 +87,23 @@ export const isDateFullyEntered = (value: Date | DateRange) => {
     !!value[1] &&
     isDateFromInputIsFullyEntered(value[1])
   );
+};
+
+export const useCombinedRefs = <T>(...refs: Ref<T>[]) => {
+  const targetRef = useRef<T>(null);
+
+  useEffect(() => {
+    refs.forEach((ref) => {
+      if (!ref) return;
+
+      if (typeof ref === 'function') {
+        ref(targetRef.current);
+      } else {
+        // eslint-disable-next-line no-param-reassign
+        ref = targetRef;
+      }
+    });
+  }, [refs]);
+
+  return targetRef;
 };
