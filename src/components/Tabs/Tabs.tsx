@@ -9,7 +9,7 @@ import { cn } from '../../utils/bem';
 import { getSizeByMap } from '../../utils/getSizeByMap';
 import { PropsWithHTMLAttributesAndRef } from '../../utils/types/PropsWithHTMLAttributes';
 
-import { TabsTab } from './TabsTab/TabsTab';
+import { cnTabsTab, TabsTab } from './Tab/TabsTab';
 
 export const tabsSizes = ['m', 's'] as const;
 export type TabsPropSize = typeof tabsSizes[number];
@@ -26,7 +26,20 @@ export type TabsPropOnChange<ITEM> = (props: {
   value: ITEM | null;
 }) => void;
 
-type Props<ITEM = any> = PropsWithHTMLAttributesAndRef<
+export type RenderItem<ITEM, ELEMENT> = (props: {
+  item: ITEM;
+  ref: React.RefObject<ELEMENT>;
+  key: string | number;
+  onChange: React.MouseEventHandler<ELEMENT>;
+  checked: boolean;
+  label: string;
+  icon?: React.FC<IconProps>;
+  iconSize: IconPropSize;
+  onlyIcon?: boolean;
+  className: string;
+}) => React.ReactElement | null;
+
+type Props<ITEM = any, ITEM_ELEMENT = any> = PropsWithHTMLAttributesAndRef<
   {
     size?: TabsPropSize;
     onlyIcon?: boolean;
@@ -38,13 +51,42 @@ type Props<ITEM = any> = PropsWithHTMLAttributesAndRef<
     getLabel: TabsPropGetLabel<ITEM>;
     children?: never;
     onChange: TabsPropOnChange<ITEM>;
+    renderItem?: RenderItem<ITEM, ITEM_ELEMENT>;
   },
   HTMLDivElement
 >;
 
 export const cnTabs = cn('Tabs');
 
-type Tabs = <ITEM>(props: Props<ITEM>) => React.ReactElement | null;
+const renderItemDefault: RenderItem<unknown, HTMLButtonElement> = ({
+  ref,
+  key,
+  onChange,
+  checked,
+  label,
+  icon,
+  iconSize,
+  onlyIcon,
+  className,
+}) => {
+  return (
+    <TabsTab
+      className={className}
+      ref={ref}
+      key={key}
+      onChange={onChange}
+      checked={checked}
+      label={label}
+      icon={icon}
+      iconSize={iconSize}
+      onlyIcon={onlyIcon}
+    />
+  );
+};
+
+type Tabs = <ITEM = unknown, ITEMELEMENT = HTMLButtonElement>(
+  props: Props<ITEM, ITEMELEMENT>,
+) => React.ReactElement | null;
 
 const sizeMap: Record<TabsPropSize, IconPropSize> = {
   s: 'xs',
@@ -63,13 +105,13 @@ export const Tabs: Tabs = React.forwardRef<HTMLDivElement, Props>((props, ref) =
     getLabel,
     onChange,
     iconSize: iconSizeProp,
+    renderItem = renderItemDefault,
     ...otherProps
   } = props;
 
-  const { getOnChange, getChecked } = useChoiceGroup<
-    typeof items[number],
-    React.MouseEvent<HTMLButtonElement>
-  >({
+  type Item = typeof items[number];
+
+  const { getOnChange, getChecked } = useChoiceGroup<Item, React.MouseEvent<HTMLButtonElement>>({
     value,
     getKey: getLabel,
     callBack: onChange,
@@ -141,19 +183,20 @@ export const Tabs: Tabs = React.forwardRef<HTMLDivElement, Props>((props, ref) =
       {...otherProps}
     >
       <div className={cnTabs('List')}>
-        {items.map((item: unknown) => (
-          <TabsTab
-            className={cnTabs('Tab')}
-            ref={buttonRefs[getLabel(item)]}
-            key={getLabel(item)}
-            onChange={getOnChange(item)}
-            checked={getChecked(item)}
-            label={getLabel(item).toString()}
-            icon={getIcon && getIcon(item)}
-            iconSize={iconSize}
-            onlyIcon={onlyIcon}
-          />
-        ))}
+        {items.map((item: unknown) => {
+          return renderItem({
+            item,
+            ref: buttonRefs[getLabel(item)],
+            key: getLabel(item),
+            onChange: getOnChange(item),
+            checked: getChecked(item),
+            label: getLabel(item).toString(),
+            icon: getIcon && getIcon(item),
+            iconSize,
+            onlyIcon,
+            className: cnTabs('Tab'),
+          });
+        })}
       </div>
       <div className={cnTabs('WrapperRunningLine')}>
         <div className={cnTabs('RunningLine', { withOutValue, mounted })} ref={lineRef} />
@@ -161,3 +204,5 @@ export const Tabs: Tabs = React.forwardRef<HTMLDivElement, Props>((props, ref) =
     </div>
   );
 });
+
+export { TabsTab, cnTabsTab };
