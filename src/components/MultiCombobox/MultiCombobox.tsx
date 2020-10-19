@@ -11,18 +11,21 @@ import { SelectDropdown } from '../SelectComponents/SelectDropdown/SelectDropdow
 import { CommonSelectProps, DefaultPropForm, DefaultPropView } from '../SelectComponents/types';
 import { Tag } from '../Tag/Tag';
 
+type SelectContainerProps = React.ComponentProps<typeof SelectContainer>;
+
 export const multiComboboxPropSize = ['m', 's', 'l'] as const;
 export type MultiComboboxPropSize = typeof multiComboboxPropSize[number];
 export const multiComboboxPropSizeDefault = multiComboboxPropSize[0];
 
-export type MultiComboboxProps<ITEM> = CommonSelectProps<ITEM> & {
-  value?: ITEM[] | null;
-  onChange?: (v: ITEM[] | null) => void;
-  onCreate?(str: string): void;
-  getGroupOptions?(group: ITEM): ITEM[];
-  labelForCreate?: string;
-  size?: MultiComboboxPropSize;
-};
+export type MultiComboboxProps<ITEM> = CommonSelectProps<ITEM> &
+  Omit<SelectContainerProps, 'value' | 'onChange'> & {
+    value?: ITEM[] | null;
+    onChange?: (v: ITEM[] | null) => void;
+    onCreate?(str: string): void;
+    getGroupOptions?(group: ITEM): ITEM[];
+    labelForCreate?: string;
+    size?: MultiComboboxPropSize;
+  };
 
 type MultiComboboxType = <ITEM>(props: MultiComboboxProps<ITEM>) => React.ReactElement | null;
 

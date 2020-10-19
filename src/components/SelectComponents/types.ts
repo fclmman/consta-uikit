@@ -26,12 +26,7 @@ export const DefaultPropView: PropView = 'default';
 export type CommonSelectProps<ITEM> = {
   options: ITEM[];
   id: string;
-  className?: string;
   placeholder?: string;
-  disabled?: boolean;
-  form?: PropForm;
-  size?: PropSize;
-  view?: PropView;
   ariaLabel?: string;
   getOptionLabel(arg: ITEM): string;
   onBlur?: (event?: React.FocusEvent<HTMLInputElement>) => void;
