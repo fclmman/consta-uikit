@@ -1,5 +1,9 @@
-import { DateRange } from '../../DatePicker';
-import { isDateHighlighted, isValueSelected, isValueSelectedBackwards } from '../Calendar';
+import { DateRange } from '../../types';
+import {
+  isDateHighlighted,
+  isValueSelected,
+  isValueSelectedBackwards,
+} from '../DatePickerCalendar';
 
 describe('isValueSelected', () => {
   describe('переданное значение - одна дата', () => {

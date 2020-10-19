@@ -1,15 +1,15 @@
 import { addMonths, differenceInCalendarMonths, getDaysInMonth } from 'date-fns';
 
 import { range } from '../../../utils/array';
-import { DateLimitProps, DateRange, ValueProps } from '../DatePicker';
+import { DateRange, MinMaxDate, ValueProps } from '../types';
 
-export const getMonths = ({ minDate, maxDate }: DateLimitProps): Date[] => {
+export const getMonths = ({ minDate, maxDate }: MinMaxDate): Date[] => {
   const monthAmount = differenceInCalendarMonths(maxDate, minDate) + 1;
 
   return range(monthAmount).map((i) => addMonths(minDate, i));
 };
 
-export const getBaseDate = (value?: DateRange) => {
+export const getBaseDate = (value?: DateRange): Date | undefined => {
   const [startDate, endDate] = value || [];
 
   return startDate || endDate;
@@ -22,7 +22,7 @@ export const getDateOffsetOnTimeline = ({
 }: {
   date: Date;
   tickWidth: number;
-} & Pick<DateLimitProps, 'minDate'>) => {
+} & Pick<MinMaxDate, 'minDate'>): number => {
   const startDay = date.getDate();
   const monthsOffsetPx = differenceInCalendarMonths(date, minDate) * tickWidth;
   const daysOffsetPx = (tickWidth * startDay) / getDaysInMonth(date);
@@ -30,7 +30,7 @@ export const getDateOffsetOnTimeline = ({
   return Math.round(monthsOffsetPx + daysOffsetPx);
 };
 
-export const getSelectedDayWidth = (date: Date, tickWidth: number) => {
+export const getSelectedDayWidth = (date: Date, tickWidth: number): number => {
   return Math.max(Math.round(tickWidth / getDaysInMonth(date)), 1);
 };
 
@@ -41,7 +41,7 @@ export const getSelectedBlockStyles = ({
 }: {
   tickWidth: number;
 } & ValueProps<DateRange> &
-  Pick<DateLimitProps, 'minDate'>) => {
+  Pick<MinMaxDate, 'minDate'>): { left?: number; width?: number } => {
   const baseDate = getBaseDate(value);
 
   if (!baseDate) {

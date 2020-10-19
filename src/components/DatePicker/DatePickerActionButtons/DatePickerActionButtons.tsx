@@ -1,20 +1,23 @@
-import './ActionButtons.css';
+import './DatePickerActionButtons.css';
 
 import React from 'react';
 
+import { cn } from '../../../utils/bem';
 import { Button } from '../../Button/Button';
-import { cnDatePicker, DateLimitProps, DateRange } from '../DatePicker';
+import { DateRange, MinMaxDate } from '../types';
 
 import { getQuarters } from './helpers';
 
-type Props = {
+export type Props = {
   currentVisibleDate: Date;
   showQuartersSelector: boolean;
   onSelect: (value: DateRange) => void;
   onApply: () => void;
-} & DateLimitProps;
+} & MinMaxDate;
 
-export const ActionButtons: React.FC<Props> = ({
+const cnDatePickerActionButtons = cn('DatePickerActionButtons');
+
+export const DatePickerActionButtons: React.FC<Props> = ({
   currentVisibleDate,
   showQuartersSelector,
   minDate,
@@ -26,18 +29,18 @@ export const ActionButtons: React.FC<Props> = ({
   const quarters = getQuarters({ date: currentVisibleDate, minDate, maxDate });
 
   return (
-    <div className={cnDatePicker('ActionButtons')}>
-      <div className={cnDatePicker('Quarters')}>
+    <div className={cnDatePickerActionButtons()}>
+      <div className={cnDatePickerActionButtons('Quarters')}>
         {showQuartersSelector &&
           quarters.map((quarter, idx) => (
             <Button
               key={idx}
               label={`${idx + 1} кв. ${currentYear}`}
-              className={cnDatePicker('Quarter')}
+              className={cnDatePickerActionButtons('Quarter')}
               size="xs"
               view="ghost"
               disabled={!quarter.length}
-              onClick={() => onSelect(quarter)}
+              onClick={(): void => onSelect(quarter)}
             />
           ))}
       </div>

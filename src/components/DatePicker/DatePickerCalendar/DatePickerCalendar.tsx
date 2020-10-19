@@ -1,4 +1,4 @@
-import './Calendar.css';
+import './DatePickerCalendar.css';
 
 import React from 'react';
 import {
@@ -17,20 +17,32 @@ import {
 } from 'date-fns';
 
 import { chunk, range } from '../../../utils/array';
-import { isDefined } from '../../../utils/type-guards';
+import { cn } from '../../../utils/bem';
+import { isDefined, isNotNil } from '../../../utils/type-guards';
 import { Text } from '../../Text/Text';
-import { cnDatePicker, DateLimitProps, DateRange, ValueProps } from '../DatePicker';
 import { getMonthTitle, isDateRange, isOnlyOneDateInRange } from '../helpers';
+import { DateRange, MinMaxDate } from '../types';
 
-type Props = {
-  currentVisibleDate: Date;
-  onSelect: (value: Date | DateRange) => void;
-} & ValueProps<Date | DateRange> &
-  DateLimitProps;
+type OnSelectValueProps<T> = {
+  onSelect: (value: T) => void;
+  value?: T;
+};
 
-const dateComparer = (a?: Date, b?: Date) => (a?.getTime() ?? 0) - (b?.getTime() ?? 0);
+type SingleProps = {
+  type: 'date';
+} & OnSelectValueProps<Date>;
 
-const getStartAndEndDate = (date1: Date, date2: Date) => {
+type RangeProps = {
+  type: 'date-range';
+} & OnSelectValueProps<DateRange>;
+
+type Props = MinMaxDate & { currentVisibleDate: Date } & (SingleProps | RangeProps);
+
+const cnDatePickerCalendar = cn('DatePickerCalendar');
+
+const dateComparer = (a?: Date, b?: Date): number => (a?.getTime() ?? 0) - (b?.getTime() ?? 0);
+
+const getStartAndEndDate = (date1: Date, date2: Date): { start: Date; end: Date } => {
   const [start, end] = [date1, date2].sort(dateComparer);
 
   return { start, end };
@@ -43,7 +55,8 @@ export const isDateHighlighted = ({
 }: {
   date: Date;
   hoveredDate?: Date;
-} & ValueProps<Date | DateRange>) => {
+  value?: Date | DateRange;
+}): boolean => {
   if (!hoveredDate || !isDateRange(value) || !isOnlyOneDateInRange(value)) {
     return false;
   }
@@ -61,16 +74,17 @@ export const isDateHighlighted = ({
   return false;
 };
 
-const isDateSelected = ({
+const isDateSelected = ({ date, value }: { date: Date; value?: Date }): boolean => {
+  return value ? isSameDay(value, date) : false;
+};
+
+export const isValueSelected = ({
   date,
   value,
 }: {
   date: Date;
-} & ValueProps<Date>) => {
-  return value ? isSameDay(value, date) : false;
-};
-
-export const isValueSelected = ({ date, value }: { date: Date; value?: Date | DateRange }) => {
+  value?: Date | DateRange;
+}): boolean => {
   if (isDateRange(value)) {
     if (value[0] && value[1]) {
       const { start, end } = getStartAndEndDate(value[0], value[1]);
@@ -88,7 +102,7 @@ export const isValueSelectedBackwards = ({
 }: {
   value?: Date | DateRange;
   hoveredDate?: Date;
-}) => {
+}): boolean | undefined => {
   return (
     hoveredDate &&
     isDateRange(value) &&
@@ -98,7 +112,7 @@ export const isValueSelectedBackwards = ({
   );
 };
 
-const getMonthWeeks = (date: Date) => {
+const getMonthWeeks = (date: Date): (Date | undefined)[][] => {
   const currentMonth = date.getMonth();
   const startDate = startOfWeek(startOfMonth(date), { weekStartsOn: 1 });
   const endDate = endOfWeek(endOfMonth(date), { weekStartsOn: 1 });
@@ -117,54 +131,55 @@ const getMonthWeeks = (date: Date) => {
   return chunk(days, 7);
 };
 
-export const Calendar: React.FC<Props> = ({
-  onSelect,
-  value,
-  currentVisibleDate,
-  minDate,
-  maxDate,
-}) => {
+export const DatePickerCalendar: React.FC<Props> = (props) => {
+  const { value, currentVisibleDate, minDate, maxDate } = props;
   const [hoveredDate, setHoveredDate] = React.useState<Date>();
 
-  const handleHoverDate = (date: Date) => {
+  const handleHoverDate = (date: Date): void => {
     if (isWithinInterval(date, { start: minDate, end: maxDate })) {
       return setHoveredDate(date);
     }
 
     return setHoveredDate(undefined);
   };
+  let handleSelectDate: (date: Date) => void;
+  if (props.type === 'date-range') {
+    handleSelectDate = (date: Date): void => {
+      if (!isWithinInterval(date, { start: minDate, end: maxDate }) || !isNotNil(props.value)) {
+        return;
+      }
 
-  const handleSelectDate = (date: Date) => {
-    if (!isWithinInterval(date, { start: minDate, end: maxDate })) {
-      return;
-    }
+      if (!isOnlyOneDateInRange(props.value)) {
+        return props.onSelect([date, undefined]);
+      }
 
-    if (!isDateRange(value)) {
-      return onSelect(date);
-    }
+      const [startDate, endDate] = props.value;
 
-    if (!isOnlyOneDateInRange(value)) {
-      return onSelect([date, undefined]);
-    }
+      if (isDefined(startDate)) {
+        return props.onSelect(startDate > date ? [date, startDate] : [startDate, date]);
+      }
 
-    const [startDate, endDate] = value;
+      if (isDefined(endDate)) {
+        return props.onSelect(endDate > date ? [date, endDate] : [endDate, date]);
+      }
+    };
+  } else {
+    handleSelectDate = (date: Date): void => {
+      if (!isWithinInterval(date, { start: minDate, end: maxDate })) {
+        return;
+      }
 
-    if (isDefined(startDate)) {
-      return onSelect(startDate > date ? [date, startDate] : [startDate, date]);
-    }
-
-    if (isDefined(endDate)) {
-      return onSelect(endDate > date ? [date, endDate] : [endDate, date]);
-    }
-  };
+      return props.onSelect(date);
+    };
+  }
 
   const monthsAmount = isDateRange(value) ? 2 : 1;
 
-  const renderDay = (date: Date | undefined, dayIdx: number) => {
+  const renderDay = (date: Date | undefined, dayIdx: number): React.ReactElement | undefined => {
     if (!date) {
       return (
-        <div key={dayIdx} className={cnDatePicker('Cell')}>
-          <div className={cnDatePicker('CellContent')} />
+        <div key={dayIdx} className={cnDatePickerCalendar('Cell')}>
+          <div className={cnDatePickerCalendar('CellContent')} />
         </div>
       );
     }
@@ -185,7 +200,7 @@ export const Calendar: React.FC<Props> = ({
         key={dayIdx}
         role="button"
         tabIndex={0}
-        className={cnDatePicker('Cell', {
+        className={cnDatePickerCalendar('Cell', {
           today: isDateToday,
           disabled: isDisabled,
           selectable: !isDisabled,
@@ -204,8 +219,8 @@ export const Calendar: React.FC<Props> = ({
         onClick={() => handleSelectDate(date)}
         onKeyDown={() => handleSelectDate(date)}
       >
-        <div className={cnDatePicker('CellContent')}>
-          <Text as="span" size="s" className={cnDatePicker('CellContentText')}>
+        <div className={cnDatePickerCalendar('CellContent')}>
+          <Text as="span" size="s" className={cnDatePickerCalendar('CellContentText')}>
             {date.getDate()}
           </Text>
         </div>
@@ -213,25 +228,24 @@ export const Calendar: React.FC<Props> = ({
     );
   };
 
-  const renderWeek = () =>
-    ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((dayName, idx) => (
-      <div key={idx} className={cnDatePicker('Cell', { weekDay: true })}>
-        <div className={cnDatePicker('CellContent')}>
-          <Text as="span" size="2xs" transform="uppercase" view="ghost" spacing="xs">
-            {dayName}
-          </Text>
-        </div>
+  const weekHeader = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((dayName, idx) => (
+    <div key={idx} className={cnDatePickerCalendar('Cell', { weekDay: true })}>
+      <div className={cnDatePickerCalendar('CellContent')}>
+        <Text as="span" size="2xs" transform="uppercase" view="ghost" spacing="xs">
+          {dayName}
+        </Text>
       </div>
-    ));
+    </div>
+  ));
 
   return (
-    <div className={cnDatePicker('Calendar')}>
+    <div className={cnDatePickerCalendar()}>
       {range(monthsAmount).map((idx) => {
         const month = addMonths(currentVisibleDate, idx);
         const weeks = getMonthWeeks(month);
 
         return (
-          <div key={idx} className={cnDatePicker('Month')}>
+          <div key={idx} className={cnDatePickerCalendar('Month')}>
             {isDateRange(value) && (
               <Text
                 as="div"
@@ -240,15 +254,15 @@ export const Calendar: React.FC<Props> = ({
                 transform="uppercase"
                 view="primary"
                 spacing="xs"
-                className={cnDatePicker('Title')}
+                className={cnDatePickerCalendar('Title')}
               >
                 {getMonthTitle(month)}
               </Text>
             )}
-            <div className={cnDatePicker('Row', { withDaynames: true })}>{renderWeek()}</div>
-            <div className={cnDatePicker('Weeks')}>
+            <div className={cnDatePickerCalendar('Row', { withDaynames: true })}>{weekHeader}</div>
+            <div className={cnDatePickerCalendar('Weeks')}>
               {weeks.map((week, weekIdx) => (
-                <div key={weekIdx} className={cnDatePicker('Row')}>
+                <div key={weekIdx} className={cnDatePickerCalendar('Row')}>
                   {week.map(renderDay)}
                 </div>
               ))}

@@ -1,13 +1,13 @@
-import { Ref, useEffect, useRef } from 'react';
+import { Ref, RefObject, useEffect, useRef } from 'react';
 import { format, isWithinInterval } from 'date-fns';
 import ruLocale from 'date-fns/locale/ru';
 
 import { isDefined } from '../../utils/type-guards';
 
-import { isDateFromInputIsFullyEntered } from './InputDate/helpers';
-import { DateLimitProps, DateRange, ValueProps } from './DatePicker';
+import { isDateFromInputIsFullyEntered } from './DatePickerInputDate/helpers';
+import { DateRange, MinMaxDate, ValueProps } from './types';
 
-export const isDateRange: (value: ValueProps<Date | DateRange>['value']) => value is DateRange = (
+export const isDateRange: (value?: Date | DateRange) => value is DateRange = (
   value,
 ): value is DateRange =>
   Array.isArray(value) &&
@@ -18,7 +18,7 @@ export const getCurrentVisibleDate = ({
   value,
   minDate,
   maxDate,
-}: ValueProps<Date | DateRange> & DateLimitProps): Date => {
+}: ValueProps<Date | DateRange> & MinMaxDate): Date => {
   const selectedDate = (isDateRange(value) ? value[1] || value[0] : value) || new Date();
 
   if (selectedDate > maxDate) {
@@ -32,7 +32,7 @@ export const getCurrentVisibleDate = ({
   return selectedDate;
 };
 
-export const getMonthTitle = (date: Date) => {
+export const getMonthTitle = (date: Date): string => {
   return format(date, 'LLLL', { locale: ruLocale });
 };
 
@@ -42,7 +42,7 @@ export const isDateOutOfRange = ({
   maxDate,
 }: {
   date?: Date;
-} & DateLimitProps) => {
+} & MinMaxDate): boolean => {
   return !!date && !isWithinInterval(date, { start: minDate, end: maxDate });
 };
 
@@ -52,7 +52,7 @@ export const isDateIsInvalid = ({
   maxDate,
 }: {
   date?: Date;
-} & DateLimitProps) => {
+} & MinMaxDate): boolean => {
   return (
     !!date &&
     isDateFromInputIsFullyEntered(date) &&
@@ -64,11 +64,11 @@ export const isDateIsInvalid = ({
   );
 };
 
-export const isOnlyOneDateInRange = (range: DateRange) => {
+export const isOnlyOneDateInRange = (range: DateRange): boolean => {
   return Boolean((range[0] && !range[1]) || (!range[0] && range[1]));
 };
 
-export const isDateFullyEntered = (value: Date | DateRange) => {
+export const isDateFullyEntered = (value: Date | DateRange): boolean => {
   if (!isDateRange(value)) {
     return isDateFromInputIsFullyEntered(value);
   }
@@ -89,7 +89,7 @@ export const isDateFullyEntered = (value: Date | DateRange) => {
   );
 };
 
-export const useCombinedRefs = <T>(...refs: Ref<T>[]) => {
+export const useCombinedRefs = <T>(...refs: Ref<T>[]): RefObject<T> => {
   const targetRef = useRef<T>(null);
 
   useEffect(() => {
@@ -107,3 +107,7 @@ export const useCombinedRefs = <T>(...refs: Ref<T>[]) => {
 
   return targetRef;
 };
+
+export function noop(): void {
+  // do nothing.
+}

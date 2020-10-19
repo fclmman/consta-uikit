@@ -1,4 +1,4 @@
-import { DateRange } from '../../DatePicker';
+import { DateRange } from '../../types';
 import { getQuarters } from '../helpers';
 
 const START_OF_DAY = [0, 0, 0, 0] as const;

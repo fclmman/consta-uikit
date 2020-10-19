@@ -1,4 +1,4 @@
-import './MonthsSliderRange.css';
+import './DatePickerMonthsSliderRange.css';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
@@ -13,22 +13,18 @@ import {
 } from 'date-fns';
 
 import { groupBy } from '../../../utils/array';
+import { cn } from '../../../utils/bem';
 import { Text } from '../../Text/Text';
-import { cnDatePicker, DateLimitProps, DateRange, ValueProps } from '../DatePicker';
-import { MonthsSliderWrapper } from '../MonthsSliderWrapper/MonthsSliderWrapper';
+import { DatePickerMonthsSliderWrapper } from '../DatePickerMonthsSliderWrapper/DatePickerMonthsSliderWrapper';
+import { DateRange, RenderSliderProps } from '../types';
 
 import { getBaseDate, getMonths, getSelectedBlockStyles } from './helpers';
-
-type Props = {
-  currentVisibleDate: Date;
-  onChange: (date: Date) => void;
-} & DateLimitProps &
-  ValueProps<DateRange>;
 
 const MOVE_STEP = 12;
 const TICK_WIDTH = 32;
 const MONTHS_AMOUNT_IN_RANGE = 2;
 const DND_DATE_RANGE_TYPE = 'Date-range';
+const cnDatePickerMonthsSliderRange = cn('DatePickerMonthsSliderRange');
 
 const TickSelector: React.FC<{
   offsetLeft: number;
@@ -38,11 +34,11 @@ const TickSelector: React.FC<{
     item: { type: DND_DATE_RANGE_TYPE },
   });
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (): void => {
     setIsDragging(true);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (): void => {
     setIsDragging(false);
   };
 
@@ -52,7 +48,7 @@ const TickSelector: React.FC<{
       ref={dragRef}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      className={cnDatePicker('Selector', { dragging: isDragging })}
+      className={cnDatePickerMonthsSliderRange('Selector', { dragging: isDragging })}
       style={{
         left: TICK_WIDTH * offsetLeft,
       }}
@@ -60,7 +56,7 @@ const TickSelector: React.FC<{
   );
 };
 
-export const MonthsSliderRange: React.FC<Props> = ({
+export const DatePickerMonthsSliderRange: React.FC<RenderSliderProps<DateRange>> = ({
   value,
   onChange,
   currentVisibleDate,
@@ -131,7 +127,7 @@ export const MonthsSliderRange: React.FC<Props> = ({
   };
 
   return (
-    <MonthsSliderWrapper
+    <DatePickerMonthsSliderWrapper
       onMovePrev={handleMovePrev}
       isMovePrevDisabled={offsetRatio === 0}
       onMoveNext={handleMoveNext}
@@ -139,32 +135,35 @@ export const MonthsSliderRange: React.FC<Props> = ({
     >
       <div
         ref={ref}
-        className={cnDatePicker('Timeline')}
+        className={cnDatePickerMonthsSliderRange('Timeline')}
         style={{ ['--tick-width' as string]: `${TICK_WIDTH}px` }}
       >
         <div
           ref={dropRef}
-          className={cnDatePicker('Ticks')}
+          className={cnDatePickerMonthsSliderRange('Ticks')}
           style={{ transform: `translateX(${-1 * offsetRatio * MOVE_STEP * TICK_WIDTH}px)` }}
         >
           <TickSelector
             offsetLeft={differenceInCalendarMonths(currentVisibleDate, startOfYear(minDate))}
           />
           {getBaseDate(value) && (
-            <div className={cnDatePicker('Selected')} style={selectedBlockStyles} />
+            <div
+              className={cnDatePickerMonthsSliderRange('Selected')}
+              style={selectedBlockStyles}
+            />
           )}
           {Object.entries(monthsGroupedByYear).map(([year, yearMonths], idxYear) => {
             const isYearActive = idxYear === offsetRatio;
             const yearNameView = isYearActive ? 'primary' : 'ghost';
 
             return (
-              <div className={cnDatePicker('Year')} key={idxYear}>
+              <div className={cnDatePickerMonthsSliderRange('Year')} key={idxYear}>
                 <Text
                   size="s"
                   as="div"
                   view={yearNameView}
                   weight="bold"
-                  className={cnDatePicker('YearName', { active: isYearActive })}
+                  className={cnDatePickerMonthsSliderRange('YearName', { active: isYearActive })}
                 >
                   {year}
                 </Text>
@@ -175,7 +174,7 @@ export const MonthsSliderRange: React.FC<Props> = ({
                     <div
                       key={idxMonth}
                       tabIndex={0}
-                      className={cnDatePicker('Tick')}
+                      className={cnDatePickerMonthsSliderRange('Tick')}
                       role="button"
                       onClick={() => onChange(month)}
                       onKeyDown={() => onChange(month)}
@@ -191,6 +190,6 @@ export const MonthsSliderRange: React.FC<Props> = ({
           })}
         </div>
       </div>
-    </MonthsSliderWrapper>
+    </DatePickerMonthsSliderWrapper>
   );
 };

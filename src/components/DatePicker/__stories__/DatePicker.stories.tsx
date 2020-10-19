@@ -3,10 +3,11 @@ import { date as knobsDate, select } from '@storybook/addon-knobs';
 import { addMonths, isValid, subYears } from 'date-fns';
 
 import { createMetadata, createStory } from '../../../utils/storybook';
-import { DatePicker, DateRange, sizes } from '../DatePicker';
-import { getDateMidnightFromString, getInputValue } from '../InputDate/helpers';
+import { DatePicker } from '../DatePicker';
+import { getDateMidnightFromString, getInputValue } from '../DatePickerInputDate/helpers';
+import { DateRange, sizes } from '../types';
 
-const setInputValue = (value?: string) => {
+const setInputValue = (value?: string): Date | undefined => {
   if (!value) {
     return undefined;
   }

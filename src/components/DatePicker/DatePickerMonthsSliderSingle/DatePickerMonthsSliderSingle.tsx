@@ -1,31 +1,29 @@
-import './MonthsSliderSingle.css';
+import './DatePickerMonthsSliderSingle.css';
 
 import React from 'react';
 import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns';
 
+import { cn } from '../../../utils/bem';
 import { Text } from '../../Text/Text';
-import { cnDatePicker, DateLimitProps } from '../DatePicker';
+import { DatePickerMonthsSliderWrapper } from '../DatePickerMonthsSliderWrapper/DatePickerMonthsSliderWrapper';
 import { getMonthTitle } from '../helpers';
-import { MonthsSliderWrapper } from '../MonthsSliderWrapper/MonthsSliderWrapper';
+import { MinMaxDate, RenderSliderProps } from '../types';
 
-type Props = {
-  currentVisibleDate: Date;
-  onChange: (date: Date) => void;
-} & DateLimitProps;
+const cnDatePickerMonthsSliderSingle = cn('DatePickerMonthsSliderSingle');
 
-const getIsGoToPrevMonthAllowed = (currentDate: Date, minDate: DateLimitProps['minDate']) => {
+const getIsGoToPrevMonthAllowed = (currentDate: Date, minDate: MinMaxDate['minDate']): boolean => {
   return endOfMonth(subMonths(currentDate, 1)) >= minDate;
 };
 
-const getIsGoToNextMonthAllowed = (currentDate: Date, maxDate: DateLimitProps['maxDate']) => {
+const getIsGoToNextMonthAllowed = (currentDate: Date, maxDate: MinMaxDate['maxDate']): boolean => {
   return startOfMonth(addMonths(currentDate, 1)) <= maxDate;
 };
 
-const getTitle = (date: Date) => {
+const getTitle = (date: Date): string => {
   return `${getMonthTitle(date)} ${date.getFullYear()}`;
 };
 
-export const MonthsSliderSingle: React.FC<Props> = ({
+export const DatePickerMonthsSliderSingle: React.FC<RenderSliderProps<Date>> = ({
   currentVisibleDate,
   minDate,
   maxDate,
@@ -43,14 +41,14 @@ export const MonthsSliderSingle: React.FC<Props> = ({
   };
 
   return (
-    <MonthsSliderWrapper
+    <DatePickerMonthsSliderWrapper
       onMovePrev={handleMovePrev}
       isMovePrevDisabled={!isMovePrevAllowed}
       onMoveNext={handleMoveNext}
       isMoveNextDisabled={!isMoveNextAllowed}
     >
       <Text
-        className={cnDatePicker('SliderTitle')}
+        className={cnDatePickerMonthsSliderSingle('SliderTitle')}
         as="div"
         size="m"
         transform="uppercase"
@@ -60,6 +58,6 @@ export const MonthsSliderSingle: React.FC<Props> = ({
       >
         {getTitle(currentVisibleDate)}
       </Text>
-    </MonthsSliderWrapper>
+    </DatePickerMonthsSliderWrapper>
   );
 };

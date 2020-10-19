@@ -1,4 +1,4 @@
-.DatePicker-Timeline {
+.DatePickerMonthsSliderRange-Timeline {
   --height: var(--control-height-m);
   --z-index: 1;
 
@@ -14,18 +14,18 @@
   border-radius: var(--control-radius);
 }
 
-.DatePicker-Selected {
+.DatePickerMonthsSliderRange-Selected {
   position: absolute;
   height: 100%;
   background-color: rgba(0, 120, 210, 0.3);
 }
 
-.DatePicker-Year {
+.DatePickerMonthsSliderRange-Year {
   position: relative;
   display: flex;
 }
 
-.DatePicker-YearName {
+.DatePickerMonthsSliderRange-YearName {
   position: absolute;
   left: 0;
   bottom: var(--line-height-text-2xs);
@@ -36,13 +36,13 @@
   }
 }
 
-.DatePicker-Ticks {
+.DatePickerMonthsSliderRange-Ticks {
   position: relative;
   display: flex;
   transition: transform 0.4s;
 }
 
-.DatePicker-Tick {
+.DatePickerMonthsSliderRange-Tick {
   z-index: calc(var(--z-index) + 1);
   display: flex;
   justify-content: center;
@@ -52,7 +52,7 @@
   cursor: pointer;
 }
 
-.DatePicker-Selector {
+.DatePickerMonthsSliderRange-Selector {
   position: absolute;
   z-index: calc(var(--z-index) + 2);
   width: calc(2 * var(--tick-width));

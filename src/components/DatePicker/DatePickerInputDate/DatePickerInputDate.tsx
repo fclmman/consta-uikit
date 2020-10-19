@@ -1,12 +1,13 @@
-import './InputDate.css';
+import './DatePickerInputDate.css';
 
 import React from 'react';
 import { isValid } from 'date-fns';
 
 import { IconCalendar } from '../../../icons/IconCalendar/IconCalendar';
+import { cn } from '../../../utils/bem';
 import { TextField, TextFieldPropOnChange } from '../../TextField/TextField';
 import { Tooltip } from '../../Tooltip/Tooltip';
-import { cnDatePicker, Size } from '../DatePicker';
+import { DateControlType } from '../types';
 
 import {
   getDateMidnightFromString,
@@ -15,16 +16,9 @@ import {
   isParsedFromInputDateExists,
 } from './helpers';
 
-type Props = {
-  size?: Size;
-  value?: Date;
-  onChange: (value?: Date) => void;
-  isInvalid: boolean;
-  tooltipContent?: React.ReactNode;
-  isCalendarOpened: boolean;
-};
+const cnDatePickerInputDate = cn('DatePickerInputDate');
 
-export const InputDate: React.FC<Props> = ({
+export const DatePickerInputDate: React.FC<DateControlType<Date>> = ({
   value,
   size = 'm',
   isInvalid,
@@ -73,7 +67,7 @@ export const InputDate: React.FC<Props> = ({
       <TextField
         ref={ref}
         inputRef={inputRef}
-        className={cnDatePicker('Input')}
+        className={cnDatePickerInputDate()}
         type="date"
         size={size}
         view="default"

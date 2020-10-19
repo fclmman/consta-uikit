@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 
 import { range } from '../../../utils/array';
-import { DateLimitProps, DateRange } from '../DatePicker';
+import { DateRange, MinMaxDate } from '../types';
 
 export const getQuarters = ({
   date,
@@ -17,7 +17,7 @@ export const getQuarters = ({
   maxDate,
 }: {
   date: Date;
-} & DateLimitProps): DateRange[] => {
+} & MinMaxDate): DateRange[] => {
   const startDate = startOfYear(date);
   const endDate = endOfYear(date);
   const quarterAmount = differenceInQuarters(endDate, startDate) + 1;

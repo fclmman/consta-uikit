@@ -1,8 +1,0 @@
-.DatePicker-Slider {
-  display: flex;
-  user-select: none;
-}
-
-.DatePicker-SliderButton {
-  flex-shrink: 0;
-}
