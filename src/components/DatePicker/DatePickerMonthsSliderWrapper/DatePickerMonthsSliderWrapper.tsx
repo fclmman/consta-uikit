@@ -2,10 +2,8 @@ import './DatePickerMonthsSliderWrapper.css';
 
 import React from 'react';
 
-import { IconBackward } from '../../../icons/IconBackward/IconBackward';
-import { IconForward } from '../../../icons/IconForward/IconForward';
 import { cn } from '../../../utils/bem';
-import { Button } from '../../Button/Button';
+import { DatePickerMovePeriodButton } from '../DatePickerMovePeriodButton/DatePickerMovePeriodButton';
 
 const cnDatePickerMonthsSliderWrapper = cn('DatePickerMonthsSliderWrapper');
 
@@ -17,25 +15,6 @@ type MonthsPanelProps = {
   isMoveNextDisabled: boolean;
 };
 
-const MovePeriodButton: React.FC<{
-  direction: 'backward' | 'forward';
-  onClick: () => void;
-  disabled: boolean;
-}> = ({ direction, onClick, disabled }) => {
-  return (
-    <Button
-      className={cnDatePickerMonthsSliderWrapper('SliderButton')}
-      size="m"
-      view="clear"
-      onlyIcon
-      iconLeft={direction === 'backward' ? IconBackward : IconForward}
-      iconSize="m"
-      disabled={disabled}
-      onClick={onClick}
-    />
-  );
-};
-
 export const DatePickerMonthsSliderWrapper: React.FC<MonthsPanelProps> = ({
   children,
   onMovePrev,
@@ -44,10 +23,18 @@ export const DatePickerMonthsSliderWrapper: React.FC<MonthsPanelProps> = ({
   isMoveNextDisabled,
 }) => {
   return (
-    <div className={cnDatePickerMonthsSliderWrapper('Slider')}>
-      <MovePeriodButton direction="backward" onClick={onMovePrev} disabled={isMovePrevDisabled} />
+    <div className={cnDatePickerMonthsSliderWrapper()}>
+      <DatePickerMovePeriodButton
+        direction="backward"
+        onClick={onMovePrev}
+        disabled={isMovePrevDisabled}
+      />
       {children}
-      <MovePeriodButton direction="forward" onClick={onMoveNext} disabled={isMoveNextDisabled} />
+      <DatePickerMovePeriodButton
+        direction="forward"
+        onClick={onMoveNext}
+        disabled={isMoveNextDisabled}
+      />
     </div>
   );
 };

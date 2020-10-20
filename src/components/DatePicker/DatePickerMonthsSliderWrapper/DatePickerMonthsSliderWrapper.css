@@ -1,8 +1,4 @@
-.DatePickerMonthsSliderWrapper-Slider {
+.DatePickerMonthsSliderWrapper {
   display: flex;
   user-select: none;
-}
-
-.DatePickerMonthsSliderWrapper-SliderButton {
-  flex-shrink: 0;
 }
