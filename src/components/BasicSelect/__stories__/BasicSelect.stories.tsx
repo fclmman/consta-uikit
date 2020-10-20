@@ -6,11 +6,9 @@ import {
   DefaultPropForm,
   DefaultPropSize,
   DefaultPropView,
-  DefaultPropWidth,
   form,
   sizes,
   view,
-  width,
 } from '../../SelectComponents/types';
 import { BasicSelect } from '../BasicSelect';
 
@@ -60,7 +58,6 @@ const getKnobs = () => ({
   disabled: boolean('disabled', false),
   size: select('size', sizes, DefaultPropSize),
   view: select('view', view, DefaultPropView),
-  width: select('width', width, DefaultPropWidth),
   form: select('form', form, DefaultPropForm),
   placeholder: text('placeholder', 'Placeholder'),
 });
@@ -69,17 +66,15 @@ const Default = (props: { value?: SelectOption }): JSX.Element => {
   const getItemLabel = (option: SelectOption): string => option.label;
 
   return (
-    <>
-      <div>
-        <BasicSelect
-          {...getKnobs()}
-          id="example"
-          options={items}
-          value={props.value}
-          getOptionLabel={getItemLabel}
-        />
-      </div>
-    </>
+    <div>
+      <BasicSelect
+        {...getKnobs()}
+        id="example"
+        options={items}
+        value={props.value}
+        getOptionLabel={getItemLabel}
+      />
+    </div>
   );
 };
 

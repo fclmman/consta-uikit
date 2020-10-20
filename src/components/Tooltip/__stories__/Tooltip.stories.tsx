@@ -21,6 +21,7 @@ const cnTooltipStories = cn('TooltipStories');
 const getCommonKnobs = () => ({
   size: select('size', sizes, 's'),
   direction: select('direction', directions, 'upCenter'),
+  spareDirection: select('spareDirection', directions, 'downStartLeft'),
   possibleDirections: object('possibleDirections', directions),
   onClickOutside: action('onClickOutside'),
   children: <Text size="xs">{text('children', 'Текст тултипа')}</Text>,
@@ -90,6 +91,7 @@ export const TooltipPositionedByAnchorStory = createStory(
     const commonKnobs = {
       ...getCommonKnobs(),
       isInteractive: boolean('isInteractive', false),
+      equalAnchorWidth: boolean('equalAnchorWidth', false),
     };
 
     return (

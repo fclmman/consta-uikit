@@ -1,5 +1,67 @@
 # Changelog
 
+## v1.10.3 (19/10/2020)
+
+- [chore(CODEOWNERS): Update (#530)](https://github.com/gazprom-neft/consta-uikit/commit/e6af7331a489771dd8a90da64a5af445f9729c2c) - @nekitk
+- [feat(Selects): dropdown width equal anchor width (#486)](https://github.com/gazprom-neft/consta-uikit/commit/6ce34ff75151c5f385ce3aff1453b845bb6b4738) - @gizeasy
+- [feat(Checkbox, Radio, Switch): added alignment modifier (#522)](https://github.com/gazprom-neft/consta-uikit/commit/2839ab8f1c56e4e16a451f8d27a896124f1f1f11) - @gizeasy
+- [fix(informer) added background for view=bordered (#514)](https://github.com/gazprom-neft/consta-uikit/commit/456c8ab1869b2f76f904d55f7badaaf8a28e0ea9) - @kolebayev
+- [feat(Icons): add IconWatch (#503)](https://github.com/gazprom-neft/consta-uikit/commit/533c55cee23175d570794c1ae318b1f7ca144318) - @Shupirlik
+- [chore(chromatic): added chromatic (#510)](https://github.com/gazprom-neft/consta-uikit/commit/f0297bcb0e4b3135f02d54a00fca6762fe1e5fd3) - @gizeasy
+- [test(Checkbox): added tests (#482)](https://github.com/gazprom-neft/consta-uikit/commit/e566757c8a1ba09fdb6cb6088b19246ac729ece7) - @gizeasy
+- [test(Theme): added tests (#487)](https://github.com/gazprom-neft/consta-uikit/commit/4cd30cd77bfa04bdd5538a21d20bc1450c276179) - @gizeasy
+- [docs(Combobox): fixed onCreate story (#501)](https://github.com/gazprom-neft/consta-uikit/commit/5226621fcae9167a145034d66eeb5cd98eddc13d) - @gizeasy
+- [fix(Combobox): fixed non-uniqueness of keys in dropdown (#502)](https://github.com/gazprom-neft/consta-uikit/commit/48ed8475346efcca6ff4853b9b4bf073f7ea6289) - @gizeasy
+- [feat(Icons): add IconTrash-xs (#504)](https://github.com/gazprom-neft/consta-uikit/commit/5d0058bc4b1c8905e0e9362890bc5a2203a5f5bf) - @Shupirlik
+- [test(Timer): added tests (#505)](https://github.com/gazprom-neft/consta-uikit/commit/22d1fae0eec0a19f6f1b4b939eaaa7ff325bc0e1) - @gizeasy
+- [test(Text): added tests (#507)](https://github.com/gazprom-neft/consta-uikit/commit/bbe29b4b469e687ac42a68bbda452e65c33164cb) - @gizeasy
+- [test(Switch): added tests (#508)](https://github.com/gazprom-neft/consta-uikit/commit/938ad3e6854f84d9adea5b02327415b89b86bf84) - @gizeasy
+
+---
+
+## v1.10.2 (08/10/2020)
+
+- [test(PortalWithTheme): added tests (#489)](https://github.com/gazprom-neft/consta-uikit/commit/dcdba60b6b651addeb5d27cffe78d802dc1c6e89) - @gizeasy
+- [test(ProgressSpin): added tests (#492)](https://github.com/gazprom-neft/consta-uikit/commit/5356eebd011705869dbcf7e4fa42780b7e2bc4cf) - @gizeasy
+- [test(Radio): added tests (#493)](https://github.com/gazprom-neft/consta-uikit/commit/d0dc1893d13d663c249d4ae2dd07a43abd61fd47) - @gizeasy
+- [fix(Table): fixed zebraStriped (#494)](https://github.com/gazprom-neft/consta-uikit/commit/ab9b90262f9b09055c2470416942625adbd9eada) - @gizeasy
+- [feat(selects): added cursor: pounter for list items (#479)](https://github.com/gazprom-neft/consta-uikit/commit/a4b20f8426d6257c83983a9b04a195c7ed390865) - @gizeasy
+
+---
+
+## v1.10.1 (30/09/2020)
+
+- [test(ChoiceGroup): added new tests (#464)](https://github.com/gazprom-neft/consta-uikit/commit/021d7d8537bf93956b42ebe4a641f672caec74f0) - @gizeasy
+- [docs(BasicSelect): update docs (#450)](https://github.com/gazprom-neft/consta-uikit/commit/8cbc4658c27730092f59f4b68634363d4fd609d8) - @arhayka
+- [test(File): add tests (#441)](https://github.com/gazprom-neft/consta-uikit/commit/33dae9147ac15104f7680ce7c9d6c8821b778607) - @gizeasy
+- [chore(CODEOWNERS): update (#474)](https://github.com/gazprom-neft/consta-uikit/commit/97c5b5706373e7905ded72d7b9664fe762c000d9) - @nekitk
+- [docs(Theme): update docs (#439)](https://github.com/gazprom-neft/consta-uikit/commit/0d41368871c3c369656a2ad9db3a7c2528be91e4) - @gizeasy
+- [test(Badge): added tests (#458)](https://github.com/gazprom-neft/consta-uikit/commit/d0ec91282191bef07e89b71c1ca5fb718594d8c7) - @gizeasy
+- [docs(Combobox): add docs (#467)](https://github.com/gazprom-neft/consta-uikit/commit/6c1a19ed8e8e6da52c5073174392e6d20fd47587) - @arhayka
+- [fix(Table): hyphenation (#471)](https://github.com/gazprom-neft/consta-uikit/commit/c4251b5a8cf1fec223f459e93406b5f813c48a88) - @gizeasy
+- [test(User): added tests (#459)](https://github.com/gazprom-neft/consta-uikit/commit/c6ad97f89d84cc1a4b06fa5fab67b0e8815a6e09) - @gizeasy
+- [test(TextField): added tests (#468)](https://github.com/gazprom-neft/consta-uikit/commit/ace48f6f84faf89bc1dceec9464a1571f77e41eb) - @gizeasy
+- [fix(Header): fixed dark theme background (#460)](https://github.com/gazprom-neft/consta-uikit/commit/1a4e59b378748a653652e45fff48c520000c45ca) - @f1nzer
+- [fix(selects): исправить ошибку с обновлением значений (#469)](https://github.com/gazprom-neft/consta-uikit/commit/20ca70bd1c3557373d5c9b63ac300408bc2604ec) - @c1n1k
+
+---
+
+## v1.10.0 (25/09/2020)
+
+- [refactor(whitePaper): remove whitePaper (#435)](https://github.com/gazprom-neft/consta-uikit/commit/f611c390cb685da24c45950ee2e956c4c1441127) - @gizeasy
+- [feat(Sidebar): added Sidebar component (#449)](https://github.com/gazprom-neft/consta-uikit/commit/1f46095a5cd701385e6665587202482121275b25) - @karpovfv-nedra
+- [fix(MultiCombobox): several bugs fixed (#454)](https://github.com/gazprom-neft/consta-uikit/commit/deca91934edd5a7b1e5525635b8fcab3fee9d243) - @gizeasy
+- [test(Loader): add tests (#445)](https://github.com/gazprom-neft/consta-uikit/commit/6d2c32eba581e6d7ff4bc0e5a9e2d1eae68530a0) - @gizeasy
+- [feat(Icon): add new icons (#455)](https://github.com/gazprom-neft/consta-uikit/commit/675f3d7f38b2210d326ea0e24fd4fb01424cc736) - @fooontic
+- [test(Informer): add test (#443)](https://github.com/gazprom-neft/consta-uikit/commit/b206ff8903a603b3ab3fbfe0b3650a3319be0f5f) - @gizeasy
+- [feat(BasicSelect): add BasicSelect (#380)](https://github.com/gazprom-neft/consta-uikit/commit/81e8e261f700bd1c7f8cd7177dbadbfe90abdd29) - @c1n1k
+- [feat(Popover): added spareDirection (#432)](https://github.com/gazprom-neft/consta-uikit/commit/351397e9176a0ddd705d0e5ebe1762fcd2d09f15) - @gizeasy
+- [feat(Modal): added Modal component, stories, docs (#390)](https://github.com/gazprom-neft/consta-uikit/commit/a3b08bc57119e05879022e90ec0d91fe4dc8c02b) - @karpovfv-nedra
+- [refactor(types): enumeration in types as arrays (#398)](https://github.com/gazprom-neft/consta-uikit/commit/68afbc151e715e0a88ad10897621d23b61c5d9cd) - @gizeasy
+- [chore(CODEOWNERS): add @c1n1k (#401)](https://github.com/gazprom-neft/consta-uikit/commit/9ffedf9017f6ff21e4fd1316152a12fbf6577314) - @gizeasy
+
+---
+
 ## v1.9.0 (11/09/2020)
 
 - [fix(TextField): fix sides styles (#385)](https://github.com/gazprom-neft/consta-uikit/commit/76358842eefe9b8899f47368b67308c4c6bc95d6) - @gizeasy

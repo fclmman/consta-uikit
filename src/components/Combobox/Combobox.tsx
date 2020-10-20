@@ -13,7 +13,6 @@ import {
   DefaultPropForm,
   DefaultPropSize,
   DefaultPropView,
-  DefaultPropWidth,
 } from '../SelectComponents/types';
 
 export type ComboboxSelectProps<ITEM> = CommonSelectProps<ITEM> & {
@@ -38,7 +37,6 @@ export const Combobox: ComboboxType = (props) => {
     disabled,
     ariaLabel,
     id,
-    width = DefaultPropWidth,
     form = DefaultPropForm,
     view = DefaultPropView,
     size = DefaultPropSize,
@@ -53,6 +51,10 @@ export const Combobox: ComboboxType = (props) => {
     value: '',
   });
   const toggleRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    setValue(value);
+  }, [value]);
 
   const handlerChangeValue = (v: typeof value): void => {
     if (typeof onChange === 'function' && v) {
@@ -75,6 +77,10 @@ export const Combobox: ComboboxType = (props) => {
     const elements: NodeListOf<HTMLDivElement> = optionsRef.current.querySelectorAll(
       'div[role=option]',
     );
+
+    if (index > elements.length - 1 || index < 0) {
+      return;
+    }
 
     scrollIntoView(elements[index], optionsRef.current);
   };
@@ -171,7 +177,6 @@ export const Combobox: ComboboxType = (props) => {
       size={size}
       view={view}
       form={form}
-      width={width}
       {...restProps}
     >
       <div
@@ -242,6 +247,7 @@ export const Combobox: ComboboxType = (props) => {
           hasGroup={hasGroup}
           selectedValues={arrValue}
           labelForCreate={labelForCreate}
+          getOptionLabel={getOptionLabel}
         />
       )}
     </SelectContainer>

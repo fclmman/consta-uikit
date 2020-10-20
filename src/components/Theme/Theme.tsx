@@ -19,7 +19,6 @@ export type ThemePreset = {
   font: string;
   size: string;
   space: string;
-  gap: string;
 };
 
 type Props = {
@@ -30,7 +29,7 @@ export type ThemeProps = PropsWithHTMLAttributes<Props, HTMLDivElement>;
 
 export const cnTheme = cn('Theme');
 
-function generateThemeClassNames(preset: ThemePreset): ThemePreset {
+export function generateThemeClassNames(preset: ThemePreset): ThemePreset {
   return {
     color: {
       primary: cnTheme({ color: preset.color.primary }),
@@ -41,7 +40,6 @@ function generateThemeClassNames(preset: ThemePreset): ThemePreset {
     font: cnTheme({ font: preset.font }),
     size: cnTheme({ size: preset.size }),
     space: cnTheme({ space: preset.space }),
-    gap: cnTheme({ gap: preset.gap }),
   };
 }
 

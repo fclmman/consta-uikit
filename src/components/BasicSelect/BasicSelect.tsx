@@ -13,7 +13,6 @@ import {
   DefaultPropForm,
   DefaultPropSize,
   DefaultPropView,
-  DefaultPropWidth,
 } from '../SelectComponents/types';
 
 export type SimpleSelectProps<ITEM> = CommonSelectProps<ITEM> & {
@@ -35,7 +34,6 @@ export const BasicSelect: Select = (props) => {
     disabled,
     ariaLabel,
     id,
-    width = DefaultPropWidth,
     form = DefaultPropForm,
     view = DefaultPropView,
     size = DefaultPropSize,
@@ -43,6 +41,10 @@ export const BasicSelect: Select = (props) => {
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [val, setValue] = useState(value);
+
+  React.useEffect(() => {
+    setValue(value);
+  }, [value]);
 
   const handlerChangeValue = (v: typeof value): void => {
     if (typeof onChange === 'function' && v) {
@@ -120,7 +122,6 @@ export const BasicSelect: Select = (props) => {
       size={size}
       view={view}
       form={form}
-      width={width}
       {...restProps}
     >
       <div
@@ -174,6 +175,7 @@ export const BasicSelect: Select = (props) => {
           optionsRef={optionsRef}
           id={id}
           selectedValues={arrValue}
+          getOptionLabel={getOptionLabel}
         />
       )}
     </SelectContainer>

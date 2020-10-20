@@ -6,7 +6,13 @@ import { cnMixFocus } from '../../mixs/MixFocus/MixFocus';
 import { cn } from '../../utils/bem';
 import { PropsWithHTMLAttributes } from '../../utils/types/PropsWithHTMLAttributes';
 
-export type SwitchPropSize = 's' | 'm' | 'l';
+export const switchPropSize = ['m', 's', 'l'] as const;
+export type SwitchPropSize = typeof switchPropSize[number];
+export const switchPropSizeDefault: SwitchPropSize = switchPropSize[0];
+
+export const switchPropAlign = ['center', 'top'] as const;
+export type SwitchPropAlign = typeof switchPropAlign[number];
+export const switchPropAlignDefault: SwitchPropAlign = switchPropAlign[0];
 
 export type SwitchPropOnChange = (object: {
   e: React.ChangeEvent<HTMLInputElement>;
@@ -16,6 +22,7 @@ export type SwitchPropOnChange = (object: {
 type Props = {
   checked: boolean | undefined;
   size?: SwitchPropSize;
+  align?: SwitchPropAlign;
   disabled?: boolean;
   className?: string;
   label?: string;
@@ -40,7 +47,8 @@ export const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>((props, re
   const {
     checked = false,
     name,
-    size = 'm',
+    size = switchPropSizeDefault,
+    align = switchPropAlignDefault,
     disabled,
     className,
     label,
@@ -60,7 +68,7 @@ export const Switch = React.forwardRef<HTMLLabelElement, SwitchProps>((props, re
   };
 
   return (
-    <label {...otherProps} className={cnSwitch({ size, disabled }, [className])} ref={ref}>
+    <label {...otherProps} className={cnSwitch({ size, disabled, align }, [className])} ref={ref}>
       <input
         type="checkbox"
         name={name}

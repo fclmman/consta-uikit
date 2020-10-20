@@ -3,7 +3,13 @@ import { boolean, select, text } from '@storybook/addon-knobs';
 
 import { cn } from '../../../utils/bem';
 import { createMetadata } from '../../../utils/storybook';
-import { Checkbox } from '../Checkbox';
+import {
+  Checkbox,
+  checkboxPropAlign,
+  checkboxPropAlignDefault,
+  checkboxPropSize,
+  checkboxPropSizeDefault,
+} from '../Checkbox';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
@@ -12,14 +18,15 @@ import mdx from './Checkbox.mdx';
 const defaultKnobs = () => ({
   disabled: boolean('disabled', false),
   intermediate: boolean('intermediate', false),
-  size: select('size', ['m', 'l'], 'm'),
+  size: select('size', checkboxPropSize, checkboxPropSizeDefault),
+  align: select('align', checkboxPropAlign, checkboxPropAlignDefault),
   label: text('label', 'Check me, baby!'),
 });
 
 const cnCheckboxStories = cn('CheckboxStories');
 
 export function Playground() {
-  const { disabled, intermediate, size, label } = defaultKnobs();
+  const { disabled, intermediate, size, align, label } = defaultKnobs();
 
   const [checked, setChecked] = React.useState<boolean>(false);
 
@@ -34,6 +41,7 @@ export function Playground() {
         label={label}
         onChange={handleChange}
         checked={checked}
+        align={align}
       />
     </div>
   );
